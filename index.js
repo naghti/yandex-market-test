@@ -1,7 +1,6 @@
 const products = document.querySelectorAll(".product");
 const cart = document.querySelector(".cart");
 const cartBox = document.querySelector(".cart__box");
-const list = new Set()
 
 function createClone(product) {
   const clone = product.cloneNode(true);
@@ -35,6 +34,7 @@ function productOnDown(e) {
 
   function onUp(e) {
     document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
     
     if (isOverCart(e.clientX, e.clientY)) {
       appendToCart(clone);
@@ -43,6 +43,8 @@ function productOnDown(e) {
       document.body.removeChild(clone);
       setVisible(true, parrent)
     }
+
+    console.log(getEventListeners(e.target))
   }
 
   document.addEventListener('mousemove', onMove);
@@ -105,8 +107,6 @@ function appendToCart (clone) {
   // в коляску, подовдить видимый элемент к невидимому и потом удалять
   // видимый и делать видимым невидимый
   // на телефонах будет брать элемент который кликался и делать тоже самое
-  if (list.has(clone.id)) return;
-  else list.add(clone.id)
 
   const cartRect = cartBox.getBoundingClientRect();
   const x = cartRect.x + Math.random() * (cartRect.width - clone.offsetWidth)
@@ -121,7 +121,8 @@ function appendToCart (clone) {
   setVisible(false, cloneInCart)
   cloneInCart.style.position = 'absolute'
   cloneInCart.style.left = x2 + "px"
-  cloneInCart.style.top = y2 + "px"
+  cloneInCart.style.bottom = 0 + "px"
+  cloneInCart.style.top = null
 
   moveToCart(x, y, clone)
   cartBox.appendChild(cloneInCart)
