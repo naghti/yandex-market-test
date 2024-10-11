@@ -62,8 +62,8 @@ function productTouch (e) {
   const x = cartRect.x + Math.random() * (cartRect.width - clone.offsetWidth)
   const y = cartRect.y + cartRect.height - clone.offsetHeight
 
-  console.log(cartBox.getBoundingClientRect())
-
+  
+  setVisible(false, e.target)
   moveToCart(x, y, clone)
 }
 
