@@ -11,12 +11,15 @@ function createClone(product) {
 
 function productOnDown(e) {
   e.preventDefault();
-
+  
+  const parrent = e.target; 
   const clone = createClone(e.target); 
-
+  
   const productRect = e.target.getBoundingClientRect();
   const offsetX = e.clientX - productRect.left;
   const offsetY = e.clientY - productRect.top;
+  
+  setVisible(false, parrent)
 
   function onMove(e) {
     let left = e.clientX - offsetX;
@@ -35,6 +38,9 @@ function productOnDown(e) {
 
     if (isOverCart(e.clientX, e.clientY)) {
       appendToCart(clone);
+    }
+    else {
+      setVisible(true, parrent)
     }
   }
 
@@ -112,3 +118,6 @@ function appendToCart (clone) {
   clone.style.top = Y + 'px';
 }
 
+function setVisible (visible, product) {
+  product.style.visibility = visible ? "visible" : "hidden";
+}
