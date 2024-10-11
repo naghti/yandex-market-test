@@ -45,17 +45,20 @@ function productOnDown(e) {
 function productTouch (e) {
   let left = e.target.getBoundingClientRect().left;
   let top = e.target.getBoundingClientRect().top;
-
-  console.log(e.target.getBoundingClientRect())
  
   const clone = createClone(e.target); 
   
   clone.style.left = `${left}px`;
-  clone.style.top = `${top}px`;
+  clone.style.top = `${top}px`;  
 
-  console.log(clone)
-  
-  moveToCart(200, 200, clone)
+  const cartRect = cartBox.getBoundingClientRect();
+
+  const x = cartRect.x + Math.random() * (cartRect.width - clone.offsetWidth)
+  const y = cartRect.y + cartRect.height - clone.offsetHeight
+
+  console.log(cartBox.getBoundingClientRect())
+
+  moveToCart(x, y, clone)
 }
 
 products.forEach((product) => {
