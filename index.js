@@ -2,53 +2,102 @@ const products = document.querySelectorAll(".product");
 const cart = document.querySelector(".cart");
 const cartBox = document.querySelector(".cart__box");
 
-products.forEach((product) => {
-  function productOnDown(e) {
-    e.preventDefault();
+function createClone(product) {
+  const clone = product.cloneNode(true);
+  clone.classList.add('product-clone');
+  document.body.appendChild(clone);
+  return clone;
+}
 
-    const clone = product.cloneNode(true);
-    clone.classList.add('product-clone');
-    document.body.appendChild(clone);
+function productOnDown(e) {
+  e.preventDefault();
 
-    const productRect = product.getBoundingClientRect();
-    const offsetX = e.clientX - productRect.left;
-    const offsetY = e.clientY - productRect.top;
+  const clone = createClone(e.target); 
 
-    function onMove(e) {
-      let left = e.clientX - offsetX;
-      let top = e.clientY - offsetY;
+  const productRect = e.target.getBoundingClientRect();
+  const offsetX = e.clientX - productRect.left;
+  const offsetY = e.clientY - productRect.top;
 
-      left = Math.min(window.innerWidth - clone.offsetWidth - 10, Math.max(10, left));
-      top = Math.min(window.innerHeight - clone.offsetHeight - 10, Math.max(10, top));
+  function onMove(e) {
+    let left = e.clientX - offsetX;
+    let top = e.clientY - offsetY;
 
-      clone.style.left = left + 'px';
-      clone.style.top = top + 'px';
-    }
+    left = Math.min(window.innerWidth - clone.offsetWidth - 10, Math.max(10, left));
+    top = Math.min(window.innerHeight - clone.offsetHeight - 10, Math.max(10, top));
 
-    function onUp(e) {
-      document.removeEventListener('mousemove', onMove);
-      document.body.removeChild(clone);
-
-      if (isOverCart(e.clientX, e.clientY)) {
-        appendToCart(clone)
-      }
-    }
-
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
+    clone.style.left = left + 'px';
+    clone.style.top = top + 'px';
   }
 
+  function onUp(e) {
+    document.removeEventListener('mousemove', onMove);
+    document.body.removeChild(clone);
+
+    if (isOverCart(e.clientX, e.clientY)) {
+      appendToCart(clone);
+    }
+  }
+
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+}
+
+function productTouch (e) {
+  let left = e.target.getBoundingClientRect().left;
+  let top = e.target.getBoundingClientRect().top;
+
+  console.log(e.target.getBoundingClientRect())
+ 
+  const clone = createClone(e.target); 
+  
+  clone.style.left = `${left}px`;
+  clone.style.top = `${top}px`;
+
+  console.log(clone)
+  
+  moveToCart(200, 200, clone)
+}
+
+products.forEach((product) => {
   product.addEventListener("mousedown", productOnDown);
+  product.addEventListener("touchstart", productTouch);
 });
+
+
+function moveToCart(x, y, target, duration = 500) {
+  const initialX = target.offsetLeft;
+  const initialY = target.offsetTop;
+
+  const startTime = Date.now();
+
+  function animate() {
+    const elapsedTime = Date.now() - startTime;
+    const progress = Math.min(elapsedTime / duration, 1);   
+
+
+    const newX = initialX + (x - initialX) * progress;
+    const newY = initialY + (y - initialY) * progress;
+
+    target.style.left = `${newX}px`;
+    target.style.top = `${newY}px`;
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
 
 function isOverCart(x, y) {
   const cartRect = cart.getBoundingClientRect();
   return (x >= cartRect.left && x <= cartRect.right &&
-          y >= cartRect.top && y <= cartRect.bottom);
+         y >= cartRect.top && y <= cartRect.bottom);
 }
 
 function appendToCart (clone) {
-  cartBox.appendChild(clone); 
+  cartBox.appendChild(clone); 
   clone.classList.remove('product-clone');
 
   clone.style.position = 'absolute';
@@ -59,3 +108,4 @@ function appendToCart (clone) {
   clone.style.left = X + 'px';
   clone.style.top = Y + 'px';
 }
+
