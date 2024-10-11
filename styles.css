@@ -1,0 +1,80 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* border: 1px solid black; */
+}
+
+html {
+  overflow: hidden;
+}
+
+.box {
+  background: rgb(30, 30, 30);
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.market {
+  width: 300px;
+  height: 600px;
+  background: white;
+  position: relative;
+}
+
+.counter {
+  background-image: url("/images/Counter.svg");
+  position: relative;
+  top: 28px;
+  left: 44px;
+  height: 431px;
+  width: 211px;
+}
+
+.shelf {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: end;
+  position: relative;
+}
+.shlef-1 {
+  top: 65px;
+}
+.shlef-2 {
+  top: 100px;
+}
+.shlef-3 {
+  top: 135px;
+}
+.product {
+  pointer-events: fill;
+  cursor: pointer;
+
+}
+.product-clone {
+  position: absolute;
+}
+
+.cart {
+  background-image: url("/images/Cart.svg");
+  width: 276px;
+  height: 225px;
+  position: absolute;
+  left: 12px;
+  bottom: 0;
+  z-index: 2;
+}
+
+.cart__box {
+  width: 170px;
+  height: 150px;
+  top: 30px;
+  left: 70px;
+  position: relative;
+  border: 1px solid black;
+}
